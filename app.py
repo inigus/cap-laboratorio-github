@@ -10,7 +10,7 @@ app = Flask(__name__)
 # CAP_VERIFY_URL = "http://localhost:3000/07ae968e5c/siteverify"
 CAP_VERIFY_URL = os.environ.get(
     "CAP_VERIFY_URL",
-    "http://cap:3000/07ae968e5c/siteverify"
+    "http://cap:3000/7935d97c6a/siteverify"
 )
 
 #CAP_SECRET = "sk-rV6S0VS0OblSlzyHETFeGn52MhoJDjDCwzqMtxMKok"
