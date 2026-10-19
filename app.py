@@ -7,19 +7,20 @@ import os
 
 app = Flask(__name__)
 
+# CAP_VERIFY_URL = "http://localhost:3000/07ae968e5c/siteverify"
+CAP_VERIFY_URL = os.environ.get(
+    "CAP_VERIFY_URL",
+    "http://cap:3000/07ae968e5c/siteverify"
+)
 
-# CAP_VERIFY_URL = "http://localhost:3000/siteverify"
-CAP_VERIFY_URL = "http://localhost:3000/07ae968e5c/siteverify"
-
-# CAP_SECRET = os.environ.get("CAP_SECRET")
-CAP_SECRET = "sk-rV6S0VS0OblSlzyHETFeGn52MhoJDjDCwzqMtxMKok"
+#CAP_SECRET = "sk-rV6S0VS0OblSlzyHETFeGn52MhoJDjDCwzqMtxMKok"
+CAP_SECRET = os.environ.get("CAP_SECRET")
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-@app.route("/api/formulario", methods=["POST"])
 @app.route("/api/formulario", methods=["POST"])
 def formulario():
 
@@ -180,7 +181,7 @@ if __name__ == "__main__":
         )
 
     app.run(
-        host="127.0.0.1",
-        port=8080,
-        debug=True
+    host="0.0.0.0",
+    port=8080,
+    debug=False
     )
