@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Laboratorio CAP CAPTCHA</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@cap.js/widget"></script>
+</head>
+
+<body>
+
+<h1>Prueba CAP CAPTCHA</h1>
+
+<form id="formulario">
+
+    <p>
+        <label>
+            Nombre:
+            <input type="text" name="nombre" id="nombre" required>
+        </label>
+    </p>
+
+    <p>
+        <label>
+            Email:
+            <input type="email" name="email" id="email" required>
+        </label>
+    </p>
+
+    <h3>Verificación CAPTCHA</h3>
+
+    <cap-widget
+        id="captcha"
+        data-cap-api-endpoint="http://localhost:3000/07ae968e5c/">
+    </cap-widget>
+
+    <p>
+        <button type="submit">Enviar formulario</button>
+    </p>
+
+</form>
+
+<hr>
+
+<h3>Respuesta del servidor</h3>
+
+<pre id="resultado"></pre>
+
+
+<script>
+
+const formulario = document.getElementById("formulario");
+const resultado = document.getElementById("resultado");
+
+formulario.addEventListener("submit", async function(event) {
+
+    // Impedir el envío HTML tradicional
+    event.preventDefault();
+
+    resultado.textContent = "Enviando...";
+
+    // CAP introduce automáticamente cap-token en el formulario
+    const formData = new FormData(formulario);
+
+    const token = formData.get("cap-token");
+
+    console.log("Token CAP:", token);
+
+    if (!token) {
+
+        resultado.textContent =
+            "ERROR: debes resolver primero el CAPTCHA.";
+
+        return;
+    }
+
+
+    const datos = {
+
+        nombre: formData.get("nombre"),
+
+        email: formData.get("email"),
+
+        capToken: token
+
+    };
+
+
+    try {
+
+        const respuesta = await fetch("/api/formulario", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(datos)
+
+        });
+
+
+        const datosRespuesta = await respuesta.json();
+
+
+        resultado.textContent =
+            JSON.stringify(datosRespuesta, null, 2);
+
+
+    } catch (error) {
+
+        resultado.textContent =
+            "ERROR llamando al servidor: " + error;
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>
